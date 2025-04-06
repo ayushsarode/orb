@@ -1,4 +1,4 @@
-# Orb & OrbHub
+# Orb
 
 A custom implementation of the core Git version control system (`orb`) written in Go, and a web interface clone inspired by GitHub (`orbhub`) built with Next.js.
 
