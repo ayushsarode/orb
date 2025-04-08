@@ -52,6 +52,13 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
     *   Core Libraries: Go Standard Library (`os`, `crypto/sha1` or `sha256`, `compress/zlib`, `net/http`, etc.)
     *   CLI Framework: `flag` or `cobra` (TBD)
 
+### Git Concepts I’ve Covered
+
+- [x] Understand the Git object model: **blob**, **tree**, **commit**, **tag**
+- [ ] Learn how Git stores objects in `.git/objects` using **SHA-1 hashes**
+- [ ] Understand how **refs** (branches, tags) and **HEAD** work
+- [ ] Explore the **index (staging area)** and how it tracks changes
+- [ ] Grasp the structure of the **commit graph (DAG)** and how Git traverses history
 
 
 
