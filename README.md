@@ -55,7 +55,7 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 ### Git Concepts I’ve Covered
 
 - [x] Understand the Git object model: **blob**, **tree**, **commit**, **tag**
-- [ ] Learn how Git stores objects in `.git/objects` using **SHA-1 hashes**
+- [x] Learn how Git stores objects in `.git/objects` using **SHA-1 hashes**
 - [ ] Understand how **refs** (branches, tags) and **HEAD** work
 - [ ] Explore the **index (staging area)** and how it tracks changes
 - [ ] Grasp the structure of the **commit graph (DAG)** and how Git traverses history
