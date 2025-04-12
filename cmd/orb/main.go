@@ -1,17 +1,15 @@
-// cmd/orb/main.go
 package main
 
 import (
 	"fmt"
 	"os"
-
-	"github.com/ayushsarode/Orb/internal"
+	"github.com/ayushsarode/orb/internal/cmd"
 )
 
 func main() {
-	rootCmd := cmd.NewRootCommand()
+	rootCmd := cmd.NewRootCommnad()
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		 fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		 os.Exit(1)
 	}
 }
