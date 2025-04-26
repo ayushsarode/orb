@@ -28,15 +28,15 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 *   [x] `orb hash-object`: Create blob objects from files.
 *   [ ] `orb cat-file`: Inspect Git objects (blob, tree, commit).
 *   [x] `orb add`: Stage file changes (update the index).
-*   [ ] `orb write-tree`: Create a tree object from the index.
-*   [ ] `orb commit-tree`: Create a commit object.
+*   [x] `orb write-tree`: Create a tree object from the index.
+*   [x] `orb commit-tree`: Create a commit object.
 *   [x] `orb commit`: Create a commit (combining `write-tree`, `commit-tree`, and updating refs).
 *   [x] `orb log`: View commit history.
 *   [x] `orb status`: Show working directory and staging area status.
 
 ### `orb` (Go CLI) - Future Goals
 
-*   [ ] Branching (`orb branch`, `orb checkout`)
+*   [x] Branching (`orb branch`, `orb checkout`)
 *   [ ] Merging
 *   [ ] Diffing (`orb diff`)
 *   [ ] Networking (`orb clone`, `orb fetch`, `orb pull`, `orb push`) via HTTP Smart Protocol
@@ -50,7 +50,7 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 *   **`orb`:**
     *   Language: **Go**
     *   Core Libraries: Go Standard Library (`os`, `crypto/sha1` or `sha256`, `compress/zlib`, `net/http`, etc.)
-    *   CLI Framework: `flag` or `cobra` (TBD)
+    *   CLI Framework: `cobra`
 
 ### Git Concepts I’ve Covered
 
