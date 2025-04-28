@@ -60,5 +60,5 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 - [x] Explore the **index (staging area)** and how it tracks changes
 - [ ] Grasp the structure of the **commit graph (DAG)** and how Git traverses history
 
-
+<img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fayushsarode%2Forb&label=visitors&countColor=%2337d67a&style=for-the-badge&labelStyle=upper" />
 
