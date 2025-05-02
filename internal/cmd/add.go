@@ -24,14 +24,14 @@ func newAddCommnad() *cobra.Command {
 			}
 			
 			for _, pattern := range args {
-				// Handle wildcards by using filepath.Glob
+			
 				matches, err := filepath.Glob(pattern)
 				if err != nil {
 					return fmt.Errorf("invalid pattern: %w", err)
 				}
 				
 				for _, path := range matches {
-					// Check if it's a directory
+					
 					info, err := os.Stat(path)
 					if err != nil {
 						fmt.Fprintf(os.Stderr, "Warning: cannot stat '%s': %v\n", path, err)
@@ -39,12 +39,12 @@ func newAddCommnad() *cobra.Command {
 					}
 					
 					if info.IsDir() {
-						// TODO: Handle directories recursively
+						// here we need to handle dir recursively
 						fmt.Printf("Adding files in '%s' is not yet supported\n", path)
 						continue
 					}
 					
-					// Write the file to the object store
+					
 					hash, err := objects.WriteBlob(path)
 					if err != nil {
 						return fmt.Errorf("writing blob for %s: %w", path, err)
@@ -59,7 +59,7 @@ func newAddCommnad() *cobra.Command {
 				}
 			}
 			
-			// Write the updated index
+			// write the updated index
 			if err := idx.Write(); err != nil {
 				return fmt.Errorf("writing index: %w", err)
 			}

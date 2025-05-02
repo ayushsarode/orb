@@ -13,8 +13,12 @@ func NewRootCommnad() *cobra.Command {
 	}
 	rootCmd.AddCommand(newInitCommand())
 	rootCmd.AddCommand(newAddCommnad())
-	// rootCmd.AddCommand(NewCommitCommnad())
-	// rootCmd.AddCommand(newLogComnad())
+	rootCmd.AddCommand(newCommitCommand())
+	rootCmd.AddCommand(newLogCommand())
+	rootCmd.AddCommand(newStatusCommand()) 
+	rootCmd.AddCommand(newConfigCommand())
+	rootCmd.AddCommand(newBranchCommand())  
+    rootCmd.AddCommand(newCheckoutCommand()) 
 
 
 	return rootCmd
