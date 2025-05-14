@@ -7,46 +7,98 @@ import (
 	"strings"
 )
 
-
-// other pkgs needed to access these pathss which required exported (capitalized) const 
+// other pkgs needed to access these pathss which required exported (capitalized) const
 const (
-	RefsDir  = ".orb/refs"   
+	RefsDir  = ".orb/refs"
 	HeadsDir = ".orb/refs/heads" // where branches live
 	TagsDir  = ".orb/refs/tags"  // where tags live
 	HeadFile = ".orb/HEAD"       // special pointer to current location
 )
 
+// ReadRef reads the commit hash that a ref points to
+func ReadRef(ref string) (string, error) {
+	var path string
 
+	// For refs with standard format
+	if strings.HasPrefix(ref, "refs/") {
+		path = filepath.Join(".orb", ref)
+	} else if strings.HasPrefix(ref, "heads/") || strings.HasPrefix(ref, "tags/") {
+		path = filepath.Join(RefsDir, ref)
+	} else {
+		// Assume it's a branch name
+		path = filepath.Join(HeadsDir, ref)
+	}
+
+	return readRefFile(path)
+}
+
+// ReadHead reads the current HEAD reference
+func ReadHead() (string, error) {
+	content, err := os.ReadFile(HeadFile)
+	if err != nil {
+		return "", fmt.Errorf("reading HEAD file: %w", err)
+	}
+
+	head := strings.TrimSpace(string(content))
+
+	// If HEAD points to a ref (normal case)
+	if strings.HasPrefix(head, "ref: ") {
+		return strings.TrimPrefix(head, "ref: "), nil
+	}
+
+	// Detached HEAD (points directly to a commit)
+	return head, nil
+}
+
+// GetCurrentBranch returns the name of the current branch
+func GetCurrentBranch() string {
+	content, err := os.ReadFile(HeadFile)
+	if err != nil {
+		return ""
+	}
+
+	head := strings.TrimSpace(string(content))
+
+	// If HEAD points to a branch
+	if strings.HasPrefix(head, "ref: refs/heads/") {
+		return strings.TrimPrefix(head, "ref: refs/heads/")
+	}
+
+	// Detached HEAD state
+	return ""
+}
 
 func GetRef(ref string) (string, error) {
+	// First check if this is a full ref path
+	var path string
+
 	if ref == "HEAD" {
-		return GetHead()
-	}
+		// Special case for HEAD - read the HEAD file directly first
+		headContent, err := os.ReadFile(HeadFile)
+		if err != nil {
+			return "", fmt.Errorf("reading HEAD file: %w", err)
+		}
 
-	// try all possible paths for the reference
-	paths := []string{
-		ref,
-		filepath.Join(RefsDir, ref),
-		filepath.Join(HeadsDir, ref),
-		filepath.Join(TagsDir, ref),
-	}
-
-	// Also try with "refs/heads/" prefix
-	if !strings.HasPrefix(ref, "refs/heads/") {
-		paths = append(paths, filepath.Join(".orb/refs/heads", ref))
-	}
-
-	if strings.HasPrefix(ref, "refs/") {
-		paths = append(paths, filepath.Join(".orb", ref))
-	}
-
-	for _, path := range paths {
-		if hash, err := readRefFile(path); err == nil {
-			return hash, nil
+		head := strings.TrimSpace(string(headContent))
+		if strings.HasPrefix(head, "ref: ") {
+			refPath := strings.TrimPrefix(head, "ref: ")
+			return GetRef(refPath)
+		}
+		return head, nil
+	} else if strings.HasPrefix(ref, "refs/") {
+		path = filepath.Join(".orb", ref)
+	} else if strings.HasPrefix(ref, "heads/") || strings.HasPrefix(ref, "tags/") {
+		path = filepath.Join(RefsDir, ref)
+	} else {
+		// Try as a branch name first
+		path = filepath.Join(HeadsDir, ref)
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			// If not a branch, try as a tag name
+			path = filepath.Join(TagsDir, ref)
 		}
 	}
 
-	return "", fmt.Errorf("reference not found: %s", ref)
+	return readRefFile(path)
 }
 
 // changes where a reference points
@@ -56,7 +108,7 @@ func UpdateRef(ref, hash string) error {
 	}
 
 	var path string
-	
+
 	// For branches: writes the commit hash to a file in heads
 	if strings.HasPrefix(ref, "refs/") {
 		if !strings.HasPrefix(ref, ".orb/") { //.orb/ prefix
@@ -111,8 +163,8 @@ func UpdateHead(target string) error {
 	}
 
 	// Check if target exists as a branch
-	branchPath := filepath.Join(HeadFile, target)
-	if _, err := os.Stat(branchPath); err != nil && !os.IsNotExist(err) {
+	branchPath := filepath.Join(HeadsDir, target)
+	if _, err := os.Stat(branchPath); err != nil && os.IsNotExist(err) {
 		return fmt.Errorf("checking branch existence: %w", err)
 	}
 

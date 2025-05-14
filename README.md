@@ -26,7 +26,6 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 
 *   [x] `orb init`: Initialize a new `.orb` repository.
 *   [x] `orb hash-object`: Create blob objects from files.
-*   [ ] `orb cat-file`: Inspect Git objects (blob, tree, commit).
 *   [x] `orb add`: Stage file changes (update the index).
 *   [x] `orb write-tree`: Create a tree object from the index.
 *   [x] `orb commit-tree`: Create a commit object.
@@ -41,7 +40,6 @@ This project is primarily an ambitious **learning exercise** aimed at deeply und
 *   [ ] Diffing (`orb diff`)
 *   [ ] Networking (`orb clone`, `orb fetch`, `orb pull`, `orb push`) via HTTP Smart Protocol
 *   [ ] Networking via SSH Protocol
-*   [ ] Tagging (`orb tag`)
 *   [ ] Garbage collection / Packing
 
 
