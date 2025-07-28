@@ -5,38 +5,37 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v4
       with:
-        go-version: 1.21
+        go-version: '1.21'
     
-    - name: Build Orb binaries
-      run: |
-        # Build for multiple platforms
-        GOOS=linux GOARCH=amd64 go build -o orb-linux-amd64 cmd/orb/main.go
-        GOOS=linux GOARCH=arm64 go build -o orb-linux-arm64 cmd/orb/main.go
-        GOOS=darwin GOARCH=amd64 go build -o orb-darwin-amd64 cmd/orb/main.go
-        GOOS=darwin GOARCH=arm64 go build -o orb-darwin-arm64 cmd/orb/main.go
-        GOOS=windows GOARCH=amd64 go build -o orb-windows-amd64.exe cmd/orb/main.go
+    - name: Create directories
+      run: mkdir -p dist
+    
+    - name: Build binaries
+      run: make build-all
+    
+    - name: List built files
+      run: ls -la dist/
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          orb-*
+        files: dist/*
         body: |
-          ## Orb Version Control System
+          ## Orb Version Control System ${{ github.ref_name }}
           
-          ### What's New
-          - Full Git-like version control functionality
-          - Cross-platform support
-          - Built from scratch in Go
+          A Git-like version control system built from scratch in Go!
           
           ### Installation
           
@@ -50,7 +49,14 @@ jobs:
           2. Make it executable: `chmod +x orb-*`
           3. Move to PATH: `sudo mv orb-* /usr/local/bin/orb`
           
-          ### Usage
+          ### Features
+          - Initialize repositories (`orb init`)
+          - Stage changes (`orb add`) 
+          - Create commits (`orb commit`)
+          - View history (`orb log`)
+          - Branch management (`orb branch`, `orb checkout`)
+          
+          ### Getting Started
           ```bash
           orb init
           orb add .
