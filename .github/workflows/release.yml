@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.21
+    
+    - name: Build Orb binaries
+      run: |
+        # Build for multiple platforms
+        GOOS=linux GOARCH=amd64 go build -o orb-linux-amd64 cmd/orb/main.go
+        GOOS=linux GOARCH=arm64 go build -o orb-linux-arm64 cmd/orb/main.go
+        GOOS=darwin GOARCH=amd64 go build -o orb-darwin-amd64 cmd/orb/main.go
+        GOOS=darwin GOARCH=arm64 go build -o orb-darwin-arm64 cmd/orb/main.go
+        GOOS=windows GOARCH=amd64 go build -o orb-windows-amd64.exe cmd/orb/main.go
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          orb-*
+        body: |
+          ## Orb Version Control System
+          
+          ### What's New
+          - Full Git-like version control functionality
+          - Cross-platform support
+          - Built from scratch in Go
+          
+          ### Installation
+          
+          **Quick Install (Linux/macOS):**
+          ```bash
+          curl -sSL https://raw.githubusercontent.com/ayushsarode/orb/main/install.sh | bash
+          ```
+          
+          **Manual Installation:**
+          1. Download the appropriate binary for your platform
+          2. Make it executable: `chmod +x orb-*`
+          3. Move to PATH: `sudo mv orb-* /usr/local/bin/orb`
+          
+          ### Usage
+          ```bash
+          orb init
+          orb add .
+          orb commit -m "Initial commit"
+          orb log
+          ```
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

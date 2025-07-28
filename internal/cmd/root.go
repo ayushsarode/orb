@@ -21,8 +21,8 @@ func NewRootCommnad() *cobra.Command {
 
 	// Add remote repository commands
 	rootCmd.AddCommand(newRemoteCommand())
-	rootCmd.AddCommand(newPushCommand())
-	rootCmd.AddCommand(newPullCommand())
+	// rootCmd.AddCommand(newPushCommand())
+	// rootCmd.AddCommand(newPullCommand())
 	rootCmd.AddCommand(newCloneCommand())
 
 	return rootCmd
